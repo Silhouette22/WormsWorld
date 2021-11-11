@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,13 @@ namespace ConsoleApp
     public class WorldState : IEnumerable
     {
         private readonly Dictionary<Coords, IObject> _map = new();
+        private readonly Random _random = new();
+        private readonly IWormGenerator _wormGenerator;
+
+        public WorldState(IWormGenerator wormGenerator)
+        {
+            _wormGenerator = wormGenerator;
+        }
 
         public bool AddObject(IObject obj)
         {
@@ -16,9 +24,24 @@ namespace ConsoleApp
             return true;
         }
 
-        public bool AddFood()
+        public bool AddWorm(Coords coords)
         {
-            var food = FoodGenerator.GetFood();
+            return AddObject(_wormGenerator.GetNewWorm(coords));
+        }
+
+        private Coords GetRandomCoords()
+        {
+            return new Coords(_random.NextNormal(0, 5), _random.NextNormal(0, 5));
+        }
+
+        public bool AddWorm()
+        {
+            var worm = _wormGenerator.GetNewWorm(GetRandomCoords());
+            return AddObject(worm);
+        }
+
+        public bool AddFood(IObject food)
+        {
             if (_map.TryGetValue(food.Coords, out var value))
             {
                 if (value is not Worm worm) return false;
@@ -78,41 +101,6 @@ namespace ConsoleApp
             return new StringBuilder($"[Objects on a map:  Worms:{worms.Count}: [")
                 .AppendJoin(", ", worms).Append($"] || Food:{food.Count}: [")
                 .AppendJoin(", ", food).Append("]]").ToString();
-        }
-    }
-
-    public interface IObject
-    {
-        public Coords Coords { get; set; }
-
-        // ReSharper disable once InconsistentNaming
-        public int HP { get; }
-
-        public void LoseHP(out bool isDead);
-        public Action AskForAction(WorldState state);
-    }
-
-    public class Food : IObject
-    {
-        public Food(Coords coords) => Coords = coords;
-        public Coords Coords { get; set; }
-
-        // ReSharper disable once InconsistentNaming
-        public int HP { get; private set; } = Constants.BaseHP;
-
-        public void LoseHP(out bool isDead)
-        {
-            isDead = (HP -= Constants.LostHP) <= 0;
-        }
-
-        public Action AskForAction(WorldState state)
-        {
-            return Actions.DoNothing;
-        }
-
-        public override string ToString()
-        {
-            return $"{HP}HP{Coords}";
         }
     }
 }

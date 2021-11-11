@@ -44,7 +44,7 @@
         {
             var obj = (Worm) state[coords];
             obj.LoseHPDuringMultiply();
-            state.AddObject(WormGenerator.GetNewWorm(obj.Coords + direction));
+            state.AddWorm(obj.Coords + direction);
         }
 
         private static void MultiplyTemplate(IObject obj, WorldState state, (int, int) direction)

@@ -1,44 +1,60 @@
 ﻿using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ConsoleApp
 {
-    public class WorldController
+    public class WorldController : IHostedService
     {
         private readonly WorldState _state;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IHostApplicationLifetime _applicationLifetime;
+
+        private bool _running;
 
         private int _iterations;
 
-        public WorldController() : this(1)
+        public WorldController(WorldState state, IServiceScopeFactory scopeFactory,
+            IHostApplicationLifetime applicationLifetime) : this(state, 1)
         {
+            _scopeFactory = scopeFactory;
+            _applicationLifetime = applicationLifetime;
         }
 
-        public WorldController(int wormsNumber)
+        private WorldController(WorldState state, int wormsNumber)
         {
-            _state = new WorldState();
-            _state.AddObject(WormGenerator.GetNewWorm(Constants.DefaultGenerateCoords));
+            _state = state;
+            _state.AddWorm(Constants.DefaultGenerateCoords);
             for (var i = 1; i < wormsNumber; i++)
             {
-                while(!_state.AddObject(WormGenerator.GetRandomNewWorm()));
+                while (!_state.AddWorm()) ;
             }
         }
 
-        public void Start(int iterations = 100)
+        private void Start(int iterations = 100)
         {
             _iterations = iterations;
+            _running = true;
             Run();
         }
 
         private void Run()
         {
-            using StreamWriter file = new("output.txt");
-            for (var i = 0; i < _iterations; i++)
+            using var reportWriter = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IReportWriter>();
+            for (var i = 0; i < _iterations && _running; i++)
             {
-                while (!_state.AddFood());
-                
-                //in file
-                // ReportWriter.WriteReport(file, i, _state.ToString());
+                using (var foodScope = _scopeFactory.CreateScope())
+                {
+                    var foodGenerator = foodScope.ServiceProvider.GetRequiredService<IFoodGenerator>();
+                    while (!_state.AddFood(foodGenerator.GetFood())) ;
+                }
+
                 //in Console
-                ReportWriter.WriteReport(i, _state.ToString());
+                // reportWriter.WriteReportConsole(i, _state.ToString());
+                //in file
+                reportWriter.WriteReport(i, _state.ToString());
 
                 foreach (IObject obj in _state.ReverseObjects())
                 {
@@ -52,6 +68,19 @@ namespace ConsoleApp
                     if (isDead) _state.RemoveObject(obj.Coords);
                 }
             }
+            _applicationLifetime.StopApplication();
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            Start();
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _running = false;
+            return Task.CompletedTask;
         }
     }
 }
