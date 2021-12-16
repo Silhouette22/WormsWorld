@@ -36,8 +36,7 @@ namespace ConsoleApp
 
         public bool AddWorm()
         {
-            var worm = _wormGenerator.GetNewWorm(GetRandomCoords());
-            return AddObject(worm);
+            return AddObject(_wormGenerator.GetNewWorm(GetRandomCoords()));
         }
 
         public bool AddFood(IObject food)

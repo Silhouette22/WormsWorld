@@ -20,6 +20,7 @@ namespace ConsoleApp
                 {
                     services.AddHostedService<WorldController>()
                         .AddSingleton<WorldState>()
+                        .AddSingleton<IActionProvider, ActionProvider>()
                         .AddScoped<IReportWriter>(_ => new ReportWriter(new StreamWriter("output.txt")))
                         .AddScoped<IFoodGenerator, FoodGenerator>()
                         .AddSingleton<IWormGenerator, WormGenerator>();

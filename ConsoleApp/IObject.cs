@@ -8,7 +8,6 @@
         public int HP { get; }
 
         public void LoseHP(out bool isDead);
-        public Action AskForAction(WorldState state);
     }
     
     public class Food : IObject
@@ -22,11 +21,6 @@
         public void LoseHP(out bool isDead)
         {
             isDead = (HP -= Constants.LostHP) <= 0;
-        }
-
-        public Action AskForAction(WorldState state)
-        {
-            return Actions.DoNothing;
         }
 
         public override string ToString()
