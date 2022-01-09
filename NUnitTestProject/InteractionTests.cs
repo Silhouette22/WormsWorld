@@ -1,6 +1,4 @@
 using ConsoleApp;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using NUnit.Framework;
 
 namespace NUnitTestProject
@@ -8,20 +6,19 @@ namespace NUnitTestProject
     [TestFixture]
     public class InteractionTests
     {
-        [Test]
+        [Test(TestOf = typeof(WormGenerator))]
         public void NameGeneratorTest()
         {
-            var generator = new WormGenerator();
+            IWormGenerator generator = new WormGenerator();
             var worm1 = generator.GetNewWorm(new Coords(0, 0)) as Worm;
             var worm2 = generator.GetNewWorm(new Coords(0, 0)) as Worm;
             Assert.AreNotEqual(worm1!.Name, worm2!.Name);
         }
 
-        [Test]
+        [Test(TestOf = typeof(WorldState))]
         public void FoodBusyCellGenerationTest()
         {
             var coords = new Coords(0, 0);
-            var generator = new FoodGenerator();
 
             var state = new WorldState(new WormGenerator());
             state.AddWorm(coords);
@@ -34,11 +31,10 @@ namespace NUnitTestProject
             Assert.AreEqual(pastHP + Constants.AdditionalHP, worm.HP);
         }
         
-        [Test]
+        [Test(TestOf = typeof(WorldState))]
         public void FoodUniqueCellGenerationTest()
         {
             var coords = new Coords(0, 0);
-            var generator = new FoodGenerator();
 
             var state = new WorldState(new WormGenerator());
             state.AddFood(new Food(coords));
@@ -47,7 +43,7 @@ namespace NUnitTestProject
             Assert.IsFalse(state.AddFood(new Food(coords)));
         }
 
-        [Test]
+        [Test(TestOf = typeof(ActionProvider))]
         [TestCase(0, 1)]
         [TestCase(1, 0)]
         [TestCase(0, -1)]
@@ -55,7 +51,7 @@ namespace NUnitTestProject
         public void LogicTest(int x, int y)
         {
             var direction = new Coords(x, y);
-            var actionProvider = new ActionProvider();
+            IActionProvider actionProvider = new ActionProvider();
             var action1 = GetMove(direction);
             var state = new WorldState(new WormGenerator());
 

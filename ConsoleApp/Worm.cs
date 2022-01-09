@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ConsoleApp
+﻿namespace ConsoleApp
 {
     public class Worm : IObject
     {

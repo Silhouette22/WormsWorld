@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace ConsoleApp
 {
@@ -8,6 +9,7 @@ namespace ConsoleApp
         {
         }
 
+        [JsonConstructor]
         public Coords(int x, int y)
         {
             X = x;
@@ -17,12 +19,12 @@ namespace ConsoleApp
         public int X { get; set; }
 
         public int Y { get; set; }
-        
+
         public void Deconstruct(out int x, out int y)
         {
             (x, y) = (X, Y);
         }
-        
+
         public static Coords operator +(Coords lCoords, (int x, int y) rCoords)
         {
             return new Coords(lCoords.X + rCoords.x, lCoords.Y + rCoords.y);

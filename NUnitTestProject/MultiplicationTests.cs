@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace NUnitTestProject
 {
-    [TestFixture]
+    [TestFixture(TestOf = typeof(Actions))]
     public class MultiplicationTests
     {
         [Test]

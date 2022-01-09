@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,41 +30,16 @@ namespace ConsoleApp
             _actionProvider = actionProvider;
         }
 
-        public void InitState(int wormsNumber, IFoodGenerator foodGenerator, int foodNumber = 0)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            _state.AddWorm(Constants.DefaultGenerateCoords);
-            for (var i = 1; i < wormsNumber; i++)
-            {
-                while (!_state.AddWorm()) ;
-            }
-
-            for (int i = 0; i < foodNumber; i++)
-            {
-               AddFood(foodGenerator);
-            }
+            Start(cancellationToken);
+            return Task.CompletedTask;
         }
 
-        private void Start(int iterations = 100)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            _iterations = iterations;
-            _running = true;
-            Run();
-        }
-
-        private void Run()
-        {
-            using var reportWriter = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IReportWriter>();
-            for (var i = 0; i < _iterations && _running; i++)
-            {
-                AddFood();
-                //in Console
-                reportWriter.WriteReportConsole(i, _state.ToString());
-                //in file
-                // reportWriter.WriteReport(i, _state.ToString());
-                MakeStep();
-            }
-
-            _applicationLifetime.StopApplication();
+            _running = false;
+            return Task.CompletedTask;
         }
 
         public void MakeStep()
@@ -85,28 +58,53 @@ namespace ConsoleApp
             }
         }
 
-        public void AddFood(IFoodGenerator foodGenerator)
+        private void InitState(int wormsNumber, IFoodGenerator foodGenerator, int foodNumber = 0)
         {
-            while (!_state.AddFood(foodGenerator.GetFood())) ;
+            _state.AddWorm(Constants.DefaultGenerateCoords);
+            for (var i = 1; i < wormsNumber; i++)
+            {
+                while (!_state.AddWorm()) ;
+            }
+
+            for (int i = 0; i < foodNumber; i++)
+            {
+               AddFood(foodGenerator, i);
+            }
         }
 
-        private void AddFood()
+        private void Start(CancellationToken cancellationToken, int iterations = 100)
+        {
+            _iterations = iterations;
+            _running = true;
+            Task.Run(Run, cancellationToken);
+        }
+
+        private void Run()
+        {
+            using var reportWriter = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IReportWriter>();
+            for (var i = 0; i < _iterations && _running; i++)
+            {
+                AddFood(i);
+                //in Console
+                reportWriter.WriteReportConsole(i, _state.ToString());
+                //in file
+                // reportWriter.WriteReport(i, _state.ToString());
+                MakeStep();
+            }
+
+            _applicationLifetime.StopApplication();
+        }
+
+        private void AddFood(IFoodGenerator foodGenerator, int turn)
+        {
+            while (!_state.AddFood(foodGenerator.GetFood(turn))) ;
+        }
+
+        private void AddFood(int turn)
         {
             using var foodScope = _scopeFactory.CreateScope();
             var foodGenerator = foodScope.ServiceProvider.GetRequiredService<IFoodGenerator>();
-            AddFood(foodGenerator);
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            Start();
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            _running = false;
-            return Task.CompletedTask;
+            AddFood(foodGenerator, turn);
         }
     }
 }
