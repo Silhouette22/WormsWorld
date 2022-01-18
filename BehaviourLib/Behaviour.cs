@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using ObjectsLib;
 
-namespace ConsoleApp
+namespace BehaviourLib
 {
     public class Behaviour
     {

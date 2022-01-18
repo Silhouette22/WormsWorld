@@ -1,6 +1,7 @@
 ﻿using System;
+using BehaviourLib;
 
-namespace ConsoleApp
+namespace DatabaseLib
 {
     public class DbRepository : IDisposable
     {

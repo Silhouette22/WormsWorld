@@ -1,7 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using ActionProviderLib;
+using FoodGeneratorLib;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ObjectsLib;
+using WorldStateLib;
 
 namespace ConsoleApp
 {
@@ -46,7 +50,7 @@ namespace ConsoleApp
         {
             foreach (IObject obj in _state.ReverseObjects())
             {
-                var doAction = _actionProvider.GetAction(_state, obj);
+                var doAction =  _actionProvider.GetAction(_state, obj);
                 doAction(obj, _state);
             }
 
@@ -66,7 +70,7 @@ namespace ConsoleApp
                 while (!_state.AddWorm()) ;
             }
 
-            for (int i = 0; i < foodNumber; i++)
+            for (var i = 0; i < foodNumber; i++)
             {
                AddFood(foodGenerator, i);
             }

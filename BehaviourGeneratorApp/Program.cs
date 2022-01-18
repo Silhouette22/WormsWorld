@@ -1,7 +1,8 @@
-﻿using ConsoleApp;
+﻿using DatabaseLib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NameProviderLib;
 
 namespace BehaviourGeneratorApp
 {

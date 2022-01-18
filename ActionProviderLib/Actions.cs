@@ -1,4 +1,7 @@
-﻿namespace ConsoleApp
+﻿using ObjectsLib;
+using WorldStateLib;
+
+namespace ActionProviderLib
 {
     public delegate void Action(IObject obj, WorldState state);
 

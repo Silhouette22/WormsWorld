@@ -1,4 +1,6 @@
-﻿namespace ConsoleApp
+﻿using System.Text.Json.Serialization;
+
+namespace ObjectsLib
 {
     public class Worm : IObject
     {
@@ -6,18 +8,24 @@
         {
         }
 
+        [JsonConstructor]
+        public Worm(string name, Coords coords, int hp) : this(name, coords)
+        {
+            HP = hp;
+        }
         public Worm(string name, Coords coords)
         {
             Name = name;
             Coords = coords;
+            HP = Constants.BaseHP;
         }
 
-        public string Name { get; }
+        public string Name { get; set; }
 
         public Coords Coords { get; set; }
 
         // ReSharper disable once InconsistentNaming
-        public int HP { get; private set; } = Constants.BaseHP;
+        public int HP { get; set; }
 
         public void Eat()
         {

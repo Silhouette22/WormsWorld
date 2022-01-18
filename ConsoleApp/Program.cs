@@ -1,7 +1,14 @@
 ﻿using System.IO;
+using ActionProviderLib;
+using BehaviourProviderLib;
+using DatabaseLib;
+using FoodGeneratorLib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NameProviderLib;
+using WorldStateLib;
+using WormGeneratorLib;
 
 namespace ConsoleApp
 {
@@ -20,7 +27,9 @@ namespace ConsoleApp
                 {
                     services.AddHostedService<WorldController>()
                         .AddSingleton<WorldState>()
-                        .AddSingleton<IActionProvider, ActionProvider>()
+                        .AddSingleton<IActionProvider>(new HttpActionProvider(
+                            "http://localhost:5000/WormsWorld/ActionProvider"))
+                        // .AddSingleton<IActionProvider, ActionProvider>()
                         .AddSingleton<IBehaviourProvider, BehaviourProvider>()
                         .AddDbContext<MyDbContext>(option => option.UseNpgsql(
                             @"Server=localhost;Database=WormsWorld.Environment;UserId=postgres;Password=password"))

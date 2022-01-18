@@ -1,4 +1,6 @@
-﻿namespace ConsoleApp
+﻿using ObjectsLib;
+
+namespace WormGeneratorLib
 {
     
     public class WormGenerator : IWormGenerator

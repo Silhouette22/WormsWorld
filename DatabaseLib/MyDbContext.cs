@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BehaviourLib;
+using Microsoft.EntityFrameworkCore;
 
-namespace ConsoleApp
+namespace DatabaseLib
 {
     public class MyDbContext : DbContext
     {

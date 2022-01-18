@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp
+﻿namespace ObjectsLib
 {
     public static class Constants
     {

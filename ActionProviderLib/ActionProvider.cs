@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Linq;
+using ObjectsLib;
+using WorldStateLib;
 
-namespace ConsoleApp
+namespace ActionProviderLib
 {
     public class ActionProvider : IActionProvider
     {
+        // public Task<Action> GetAction(WorldState state, IObject obj)
+        // {
+        //     return Task<Action>.Run(() => Get(state, obj));
+        // }
+
         public Action GetAction(WorldState state, IObject obj)
         {
             if (obj is Food) return Actions.DoNothing;
@@ -41,10 +48,5 @@ namespace ConsoleApp
                 f.coords.Y > obj.Coords.Y ? Actions.MoveUp :
                 Actions.DoNothing;
         }
-    }
-
-    public interface IActionProvider
-    {
-        Action GetAction(WorldState state, IObject obj);
     }
 }

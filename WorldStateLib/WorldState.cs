@@ -3,18 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
+using AdvancedRandomLib;
+using ObjectsLib;
+using WormGeneratorLib;
 
-namespace ConsoleApp
+namespace WorldStateLib
 {
     public class WorldState : IEnumerable
     {
-        private readonly Dictionary<Coords, IObject> _map = new();
+        private readonly IDictionary<Coords, IObject> _map = new Dictionary<Coords, IObject>();
         private readonly Random _random = new();
         private readonly IWormGenerator _wormGenerator;
 
         public WorldState(IWormGenerator wormGenerator)
         {
             _wormGenerator = wormGenerator;
+        }
+
+        [JsonConstructor]
+        public WorldState(IDictionary<Coords, IObject> state)
+        {
+            _map = state;
+        }
+
+        public WorldStateDto ToDto(Worm worm)
+        {
+            return new WorldStateDto(worm, Select<Worm>(), Select<Food>());
         }
 
         public bool AddObject(IObject obj)
@@ -65,6 +80,21 @@ namespace ConsoleApp
         public bool TryGetObject(Coords coords, out IObject value)
         {
             return _map.TryGetValue(coords, out value);
+        }
+
+        public bool TryGetWormByName(string name, out Worm worm)
+        {
+            try
+            {
+                worm = Select<Worm>().First(w => w.Name == name);
+            }
+            catch (InvalidOperationException ex)
+            {
+                worm = null;
+                return false;
+            }
+
+            return true;
         }
 
         public bool ContainsCoords(Coords coords)

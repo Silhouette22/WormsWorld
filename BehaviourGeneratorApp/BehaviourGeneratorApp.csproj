@@ -6,12 +6,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.13" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+      <ProjectReference Include="..\AdvancedRandomLib\AdvancedRandomLib.csproj" />
+      <ProjectReference Include="..\BehaviourLib\BehaviourLib.csproj" />
+      <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj" />
+      <ProjectReference Include="..\NameProviderLib\NameProviderLib.csproj" />
+      <ProjectReference Include="..\ObjectsLib\ObjectsLib.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ConsoleApp\ConsoleApp.csproj" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
     </ItemGroup>
 
 </Project>

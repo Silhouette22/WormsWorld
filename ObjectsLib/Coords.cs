@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace ConsoleApp
+namespace ObjectsLib
 {
     public class Coords
     {

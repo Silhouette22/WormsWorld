@@ -1,5 +1,8 @@
-using ConsoleApp;
+using ActionProviderLib;
 using NUnit.Framework;
+using ObjectsLib;
+using WorldStateLib;
+using WormGeneratorLib;
 
 namespace NUnitTestProject
 {

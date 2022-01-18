@@ -1,4 +1,8 @@
-﻿namespace ConsoleApp
+﻿using BehaviourLib;
+using DatabaseLib;
+using NameProviderLib;
+
+namespace BehaviourProviderLib
 {
     public class BehaviourProvider : IBehaviourProvider
     {
@@ -18,7 +22,7 @@
 
         public Behaviour GetBehaviour()
         {
-            return _repository.LoadBehaviour(_nameProvider.GetName());
+            return GetBehaviour(_nameProvider.GetName());
         }
     }
 

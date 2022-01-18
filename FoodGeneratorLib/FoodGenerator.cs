@@ -1,6 +1,10 @@
 ﻿using System;
+using AdvancedRandomLib;
+using BehaviourLib;
+using BehaviourProviderLib;
+using ObjectsLib;
 
-namespace ConsoleApp
+namespace FoodGeneratorLib
 {
     public class FoodGenerator : IFoodGenerator
     {

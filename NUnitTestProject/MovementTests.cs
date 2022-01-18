@@ -1,6 +1,12 @@
-﻿using ConsoleApp;
+﻿using System.Threading.Tasks;
+using ActionProviderLib;
+using ConsoleApp;
+using FoodGeneratorLib;
 using Moq;
 using NUnit.Framework;
+using ObjectsLib;
+using WorldStateLib;
+using WormGeneratorLib;
 
 namespace NUnitTestProject
 {

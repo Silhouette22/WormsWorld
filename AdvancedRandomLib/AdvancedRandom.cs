@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleApp
+namespace AdvancedRandomLib
 {
     public static class AdvancedRandom
     {

@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp
+﻿namespace NameProviderLib
 {
     public class NameProvider : INameProvider
     {

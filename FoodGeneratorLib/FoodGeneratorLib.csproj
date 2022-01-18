@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AdvancedRandomLib\AdvancedRandomLib.csproj" />
+      <ProjectReference Include="..\BehaviourLib\BehaviourLib.csproj" />
+      <ProjectReference Include="..\BehaviourProviderLib\BehaviourProviderLib.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using ConsoleApp;
+using DatabaseLib;
 using Microsoft.Extensions.Hosting;
 
 namespace BehaviourGeneratorApp
