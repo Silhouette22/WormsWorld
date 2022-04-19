@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Class1.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AdvancedRandomLib\AdvancedRandomLib.csproj" />
+      <ProjectReference Include="..\ObjectsLib\ObjectsLib.csproj" />
+      <ProjectReference Include="..\WormGeneratorLib\WormGeneratorLib.csproj" />
+    </ItemGroup>
+
+</Project>
