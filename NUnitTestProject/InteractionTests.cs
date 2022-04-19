@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using ActionProviderLib;
 using NUnit.Framework;
 using ObjectsLib;
@@ -51,7 +52,7 @@ namespace NUnitTestProject
         [TestCase(1, 0)]
         [TestCase(0, -1)]
         [TestCase(-1, 0)]
-        public void LogicTest(int x, int y)
+        public async Task LogicTest(int x, int y)
         {
             var direction = new Coords(x, y);
             IActionProvider actionProvider = new ActionProvider();
@@ -64,11 +65,9 @@ namespace NUnitTestProject
             Assert.IsTrue(state.TryGetObject(new Coords(0, 0), out var obj));
             var worm = obj as Worm;
             
-            var action2 = actionProvider.GetAction(state, worm);
+            var action2 = await actionProvider.GetAction(state, worm);
             
             Assert.AreEqual(action1, action2);
-            
-         // TODO: Multiply tests   
         }
         
         private Action GetMove(Coords direction)

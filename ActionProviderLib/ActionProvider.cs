@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using ObjectsLib;
 using WorldStateLib;
 
@@ -7,12 +8,12 @@ namespace ActionProviderLib
 {
     public class ActionProvider : IActionProvider
     {
-        // public Task<Action> GetAction(WorldState state, IObject obj)
-        // {
-        //     return Task<Action>.Run(() => Get(state, obj));
-        // }
+        public async Task<Action> GetAction(WorldState state, IObject obj)
+        {
+            return await Task.Run(() => Get(state, obj));
+        }
 
-        public Action GetAction(WorldState state, IObject obj)
+        public Action Get(WorldState state, IObject obj)
         {
             if (obj is Food) return Actions.DoNothing;
             

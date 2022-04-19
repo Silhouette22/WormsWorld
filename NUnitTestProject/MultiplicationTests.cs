@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using ActionProviderLib;
+﻿using ActionProviderLib;
 using ConsoleApp;
 using FoodGeneratorLib;
 using Moq;
@@ -110,7 +109,7 @@ namespace NUnitTestProject
         private void GetStabActionProvider(Action action, out IActionProvider stabActionProvider)
         {
             stabActionProvider = Mock.Of<IActionProvider>(provider =>
-                provider.GetAction(It.IsAny<WorldState>(), It.IsAny<IObject>()) == action);
+                provider.GetAction(It.IsAny<WorldState>(), It.IsAny<IObject>()).Result == action);
         }
 
         private Action GetMultiply(Coords direction)

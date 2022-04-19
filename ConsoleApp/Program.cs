@@ -27,14 +27,17 @@ namespace ConsoleApp
                 {
                     services.AddHostedService<WorldController>()
                         .AddSingleton<WorldState>()
+                        // ***** Action Source *****
                         .AddSingleton<IActionProvider>(new HttpActionProvider(
                             "http://localhost:5000/WormsWorld/ActionProvider"))
                         // .AddSingleton<IActionProvider, ActionProvider>()
+                        // ***** Using Database *****
                         .AddSingleton<IBehaviourProvider, BehaviourProvider>()
                         .AddDbContext<MyDbContext>(option => option.UseNpgsql(
                             @"Server=localhost;Database=WormsWorld.Environment;UserId=postgres;Password=password"))
                         .AddSingleton<DbRepository>()
                         .AddSingleton<INameProvider>(new NameProvider(args.Length > 0 ? args[0] : "empty"))
+                        // ***** Other *****
                         .AddScoped<IReportWriter>(_ => new ReportWriter(new StreamWriter("output.txt")))
                         .AddScoped<IFoodGenerator, FoodGenerator>()
                         .AddSingleton<IWormGenerator, WormGenerator>();

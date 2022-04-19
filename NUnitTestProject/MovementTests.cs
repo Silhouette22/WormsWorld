@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using ActionProviderLib;
+﻿using ActionProviderLib;
 using ConsoleApp;
 using FoodGeneratorLib;
 using Moq;
@@ -74,15 +73,15 @@ namespace NUnitTestProject
         {
             var direction = new Coords(x, y);
             var action = GetMove(direction);
-
+        
             var state = new WorldState(new WormGenerator());
             state.AddWorm( new Coords(0, 0));
             Assert.True(state.TryGetObject(new Coords(0, 0), out var obj));
             var worm1 = obj as Worm;
-
+        
             state.AddWorm(direction);
             action(worm1, state);
-
+        
             //Did not move
             Assert.AreEqual(new Coords(0, 0), worm1!.Coords);
         }
@@ -95,7 +94,7 @@ namespace NUnitTestProject
             stabWormGenerator = Mock.Of<IWormGenerator>(generator =>
                 generator.GetNewWorm(It.IsAny<Coords>()) == new Worm("", new Coords(0, 0)));
             stabActionProvider = Mock.Of<IActionProvider>(provider =>
-                provider.GetAction(It.IsAny<WorldState>(), It.IsAny<IObject>()) == action);
+                provider.GetAction(It.IsAny<WorldState>(), It.IsAny<IObject>()).Result == action);
         }
 
         private IFoodGenerator GetStabFoodGenerator(Coords coords, out IFoodGenerator stabFoodGenerator)

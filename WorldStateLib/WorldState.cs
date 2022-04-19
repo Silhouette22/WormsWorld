@@ -104,7 +104,8 @@ namespace WorldStateLib
 
         public IEnumerable<T> Select<T>()
         {
-            return _map.Select(i => i.Value).Where(obj => obj is T).Cast<T>();
+            // return _map.Select(i => i.Value).Where(obj => obj is T).Cast<T>();
+            return _map.Select(i => i.Value).OfType<T>();
         }
 
         public IObject this[Coords coords]

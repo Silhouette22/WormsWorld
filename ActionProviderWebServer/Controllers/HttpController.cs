@@ -1,4 +1,5 @@
-﻿using ActionProviderLib;
+﻿using System.Threading.Tasks;
+using ActionProviderLib;
 using Microsoft.AspNetCore.Mvc;
 using WorldStateLib;
 
@@ -15,11 +16,11 @@ namespace ActionProviderWebServer.Controllers
         }
 
         [HttpPost("{name}")]
-        public ActionDto GetAction(string name, [FromBody] WorldStateDto dto)
+        public async Task<ActionDto> GetAction(string name, [FromBody] WorldStateDto dto)
         {
             var (w, state) = dto.ToData();
             if (!state.TryGetWormByName(name, out var worm)) return null;
-            if (w.Name == name) return new ActionDto(_actionProvider.GetAction(state, worm));
+            if (w.Name == name) return new ActionDto(await _actionProvider.GetAction(state, worm));
             StatusCode(404);
             return null;
         }

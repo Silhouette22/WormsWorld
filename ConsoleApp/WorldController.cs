@@ -34,10 +34,11 @@ namespace ConsoleApp
             _actionProvider = actionProvider;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            Start(cancellationToken);
-            return Task.CompletedTask;
+            _iterations = 100;
+            _running = true;
+            await Task.Run(Run, cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -46,11 +47,11 @@ namespace ConsoleApp
             return Task.CompletedTask;
         }
 
-        public void MakeStep()
+        public async Task MakeStep()
         {
             foreach (IObject obj in _state.ReverseObjects())
             {
-                var doAction =  _actionProvider.GetAction(_state, obj);
+                var doAction = await _actionProvider.GetAction(_state, obj);
                 doAction(obj, _state);
             }
 
@@ -76,14 +77,7 @@ namespace ConsoleApp
             }
         }
 
-        private void Start(CancellationToken cancellationToken, int iterations = 100)
-        {
-            _iterations = iterations;
-            _running = true;
-            Task.Run(Run, cancellationToken);
-        }
-
-        private void Run()
+        private async Task Run()
         {
             using var reportWriter = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IReportWriter>();
             for (var i = 0; i < _iterations && _running; i++)
@@ -93,7 +87,7 @@ namespace ConsoleApp
                 reportWriter.WriteReportConsole(i, _state.ToString());
                 //in file
                 // reportWriter.WriteReport(i, _state.ToString());
-                MakeStep();
+                await MakeStep();
             }
 
             _applicationLifetime.StopApplication();

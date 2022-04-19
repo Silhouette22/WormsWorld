@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -19,14 +18,14 @@ namespace ActionProviderLib
             _client.Timeout = new TimeSpan(0, 1, 0);
         }
 
-        public Action GetAction(WorldState state, IObject obj)
+        public async Task<Action> GetAction(WorldState state, IObject obj)
         {
             if (obj is not Worm worm) return Actions.DoNothing;
             
-            var response = _client.PostAsJsonAsync(
+            var response = await _client.PostAsJsonAsync(
                 _client.BaseAddress + $"/{worm.Name}", 
-                new WorldStateDto(worm, state.Select<Worm>(), state.Select<Food>())).Result;
-            var actionDto = response.Content.ReadFromJsonAsync<ActionDto>().Result;
+                new WorldStateDto(worm, state.Select<Worm>(), state.Select<Food>()));
+            var actionDto = await response.Content.ReadFromJsonAsync<ActionDto>();
             return actionDto?.ToAction();
         }
     }
